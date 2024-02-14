@@ -15,11 +15,21 @@ def binary_classification_metrics(y_pred, y_true):
     # Some helpful links:
     # https://en.wikipedia.org/wiki/Precision_and_recall
     # https://en.wikipedia.org/wiki/F1_score
-
-    """
-    YOUR CODE IS HERE
-    """
-    pass
+    precision = 0
+    recall = 0
+    f1 = 0
+    accuracy = np.sum(y_pred == y_true) / y_pred.shape[0]
+    if np.sum(y_pred == "1") != 0:
+        precision = np.sum(np.logical_and(y_pred == y_true, y_pred == "1")) / np.sum(
+            y_pred == "1"
+        )
+    if np.sum(y_true == "1") != 0:
+        recall = np.sum(np.logical_and(y_pred == y_true, y_pred == "1")) / np.sum(
+            y_true == "1"
+        )
+    if precision != 0 or recall != 0:
+        f1 = 2 * precision * recall / (precision + recall)
+    return precision, recall, f1, accuracy
 
 
 def multiclass_accuracy(y_pred, y_true):
@@ -84,4 +94,3 @@ def mae(y_pred, y_true):
     YOUR CODE IS HERE
     """
     pass
-    
