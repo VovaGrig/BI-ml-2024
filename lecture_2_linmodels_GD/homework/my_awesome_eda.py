@@ -30,11 +30,11 @@ def run_eda(df: pd.DataFrame):
     print(f"Number of observations: {df.shape[0]}")
     print(f"Number of parameters: {df.shape[1]}\n")
     for column in df.columns:
-        if df[column].nunique() <= 4:
+        if df[column].dropna().nunique() <= 10:
             columns_types[0].append(column)
-        elif is_numeric_dtype(df[column]):
+        elif is_numeric_dtype(df[column].dropna()):
             columns_types[1].append(column)
-        elif is_string_dtype(df[column]):
+        elif is_string_dtype(df[column].dropna()):
             columns_types[2].append(column)
         elif column == "Cabin":
             columns_types[2].append(column)
