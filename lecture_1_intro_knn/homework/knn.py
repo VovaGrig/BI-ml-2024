@@ -104,13 +104,14 @@ class KNNClassifier:
            for every test sample
         """
 
-        n_train = distances.shape[1]
         n_test = distances.shape[0]
         prediction = np.zeros(n_test)
         for i in range(n_test):
-            ind0 = np.argpartition(distances[i][self.train_y == '0'], -self.k)[-self.k:]
-            ind1 = np.argpartition(distances[i][self.train_y == '1'], -self.k)[-self.k:]
-            prediction[i] = distances[i][ind0] < distances[i][ind1]
+            # ind0 = np.argpartition(distances[i][self.train_y == '0'], self.k)[:self.k]
+            # ind1 = np.argpartition(distances[i][self.train_y == '1'], self.k)[:self.k]
+            # prediction[i] = np.mean(distances[i][ind1]) > np.mean(distances[i][ind0])
+            ind = np.argpartition(distances[i], self.k)[:self.k]
+            prediction[i] = np.sum(self.train_y[ind] == '1') > np.sum(self.train_y[ind] == '0') 
         return prediction.astype('int').astype('str')
 
     def predict_labels_multiclass(self, distances):
@@ -127,9 +128,10 @@ class KNNClassifier:
 
         n_train = distances.shape[0]
         n_test = distances.shape[0]
-        prediction = np.zeros(n_test, np.int)
+        prediction = np.zeros(n_test)
 
-        """
-        YOUR CODE IS HERE
-        """
-        pass
+        for i in range(n_test):
+            ind = np.argpartition(distances[i], self.k)[:self.k]
+            ind = np.argmax([np.sum(self.train_y[ind] == j) for j in np.unique(self.train_y)])
+            prediction[i] =  np.unique(self.train_y)[ind]
+        return prediction.astype('int').astype('str')
